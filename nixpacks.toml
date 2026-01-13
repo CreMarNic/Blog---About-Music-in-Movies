@@ -1,0 +1,15 @@
+[providers]
+java = "maven"
+
+[phases.setup]
+nixPkgs = ["maven", "jdk17"]
+
+[phases.install]
+cmds = [
+  "cd backend",
+  "mvn dependency:go-offline -B",
+  "mvn clean package -DskipTests"
+]
+
+[start]
+cmd = "cd backend && java -jar target/blog-api-1.0.0.jar"
