@@ -1,21 +1,26 @@
-# Build backend
-FROM maven:3.9-eclipse-temurin-17 AS backend-build
-WORKDIR /app/backend
+# Multi-stage build for Spring Boot backend
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+
+# Copy pom.xml first for dependency caching
 COPY backend/pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy source code
 COPY backend/src ./src
+
+# Build the application
 RUN mvn clean package -DskipTests
 
-# Build frontend
-FROM node:18 AS frontend-build
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm install
-COPY frontend/ .
-RUN npm run build
-
-# Runtime - Backend
+# Runtime stage
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=backend-build /app/backend/target/*.jar app.jar
+
+# Copy jar from build stage
+COPY --from=build /app/target/blog-api-1.0.0.jar app.jar
+
+# Expose port
 EXPOSE 8080
+
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
