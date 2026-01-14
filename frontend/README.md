@@ -13,7 +13,7 @@ A modern React frontend for the "About Music in Movies" blog platform with CMS c
 
 - **CMS Dashboard** (Author/Admin only)
   - Create and edit blog posts
-  - Rich text editor (React Quill)
+  - Rich text editor (HTML textarea with video embedding)
   - Manage post status (Draft/Published)
   - View post statistics
   - Delete posts
@@ -33,7 +33,6 @@ A modern React frontend for the "About Music in Movies" blog platform with CMS c
 - **React 19** - UI library
 - **React Router** - Routing
 - **Axios** - HTTP client
-- **React Quill** - Rich text editor
 - **date-fns** - Date formatting
 - **Vite** - Build tool
 
