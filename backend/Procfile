@@ -1,1 +1,1 @@
-web: java -jar target/blog-api-1.0.0.jar
+web: bash start.sh
