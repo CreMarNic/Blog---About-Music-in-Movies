@@ -446,6 +446,8 @@ If Render gives your backend a different URL, update `VITE_API_URL` in the front
 The Blueprint sets these backend variables automatically:
 
 - `DATABASE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
 - `SPRING_DATASOURCE_DRIVER_CLASS_NAME`
 - `SPRING_JPA_HIBERNATE_DDL_AUTO`
 - `SPRING_JPA_SHOW_SQL`
