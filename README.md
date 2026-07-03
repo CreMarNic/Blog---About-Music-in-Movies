@@ -267,7 +267,142 @@ That file tells Render to create:
 
 Render Blueprints use `render.yaml` from the repository root. Render also lets services reference Postgres connection strings through `fromDatabase`, and static sites can use `routes` to rewrite browser routes back to `index.html`.
 
-### Deploy On Render
+### Manual Deploy On Render
+
+Use this option if you want to create each Render service yourself instead of using the Blueprint.
+
+#### 1. Push The Project To GitHub
+
+Render deploys from a Git repository.
+
+```bash
+git add .
+git commit -m "Prepare app for Render"
+git push
+```
+
+#### 2. Create The PostgreSQL Database
+
+1. Log in to Render.
+2. Click **New**.
+3. Choose **PostgreSQL**.
+4. Use a name like:
+
+```text
+music-movies-blog-db
+```
+
+5. Choose the same region you will use for the backend.
+6. Choose the free plan if available.
+7. Click **Create Database**.
+8. After it is created, copy the **Internal Database URL**.
+
+The internal database URL will look similar to:
+
+```text
+postgresql://user:password@host:5432/database
+```
+
+#### 3. Create The Backend Web Service
+
+1. Click **New**.
+2. Choose **Web Service**.
+3. Connect your GitHub repository.
+4. Use these settings:
+
+```text
+Name: music-movies-blog-api
+Runtime: Docker
+Branch: main
+Dockerfile Path: ./Dockerfile
+Docker Context: .
+Region: same region as your database
+Plan: free, if available
+```
+
+5. Add these environment variables:
+
+```text
+DATABASE_URL=your_internal_database_url
+SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+SPRING_JPA_SHOW_SQL=false
+SPRING_JPA_FORMAT_SQL=false
+SPRING_H2_CONSOLE_ENABLED=false
+JWT_SECRET=use-a-long-random-secret-value
+```
+
+For `DATABASE_URL`, paste the internal database URL from the PostgreSQL service.
+
+For `JWT_SECRET`, use a long random value. Do not use the default local development secret.
+
+6. Click **Create Web Service**.
+7. Wait for the backend to deploy.
+8. Open the backend URL Render gives you.
+
+It should look like:
+
+```text
+https://music-movies-blog-api.onrender.com
+```
+
+You can also check Swagger:
+
+```text
+https://music-movies-blog-api.onrender.com/swagger-ui.html
+```
+
+#### 4. Create The Frontend Static Site
+
+1. Click **New**.
+2. Choose **Static Site**.
+3. Connect the same GitHub repository.
+4. Use these settings:
+
+```text
+Name: music-movies-blog-frontend
+Branch: main
+Build Command: cd frontend && npm install && npm run build
+Publish Directory: frontend/dist
+```
+
+5. Add this environment variable:
+
+```text
+VITE_API_URL=https://your-backend-url.onrender.com
+```
+
+Replace `https://your-backend-url.onrender.com` with your real backend URL from step 3.
+
+6. Add a rewrite rule for React Router:
+
+```text
+Source: /*
+Destination: /index.html
+Action: Rewrite
+```
+
+7. Click **Create Static Site**.
+8. Wait for the frontend to deploy.
+9. Open the frontend URL Render gives you.
+
+It should look like:
+
+```text
+https://music-movies-blog-frontend.onrender.com
+```
+
+#### 5. If The Frontend Cannot Reach The Backend
+
+Check these first:
+
+- The backend deploy finished successfully.
+- `VITE_API_URL` in the frontend service is the real backend URL.
+- The backend URL starts with `https://`.
+- You redeployed the frontend after changing `VITE_API_URL`.
+- The backend environment variable `DATABASE_URL` uses the internal PostgreSQL URL.
+
+### Blueprint Deploy On Render
 
 1. Push this project to GitHub.
 2. Log in to Render.
