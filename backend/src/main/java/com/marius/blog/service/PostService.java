@@ -14,9 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -27,22 +24,11 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
     
-    @Autowired
-    private CategoryRepository categoryRepository;
-    
-    @Autowired
-    private TagRepository tagRepository;
-    
     @Transactional
     public PostResponse createPost(PostRequest request, UserDetails userDetails) {
         User author = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        
-        // Check if user has permission (AUTHOR or ADMIN)
-        if (author.getRole() != User.Role.AUTHOR && author.getRole() != User.Role.ADMIN) {
-            throw new UnauthorizedException("Only authors and admins can create posts");
-        }
-        
+
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setSlug(generateUniqueSlug(request.getTitle()));
@@ -52,28 +38,6 @@ public class PostService {
         post.setStatus(request.getStatus());
         post.setAuthor(author);
         post.setPublishedAt(request.getPublishedAt());
-        
-        // Set categories
-        if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
-            Set<Category> categories = new HashSet<>();
-            for (Long categoryId : request.getCategoryIds()) {
-                Category category = categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
-                categories.add(category);
-            }
-            post.setCategories(categories);
-        }
-        
-        // Set tags
-        if (request.getTagIds() != null && !request.getTagIds().isEmpty()) {
-            Set<Tag> tags = new HashSet<>();
-            for (Long tagId : request.getTagIds()) {
-                Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Tag not found: " + tagId));
-                tags.add(tag);
-            }
-            post.setTags(tags);
-        }
         
         post = postRepository.save(post);
         return convertToResponse(post);
@@ -87,10 +51,8 @@ public class PostService {
         User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
-        // Check if user is the author or an admin
-        if (!post.getAuthor().getId().equals(currentUser.getId()) && 
-            currentUser.getRole() != User.Role.ADMIN) {
-            throw new UnauthorizedException("You don't have permission to update this post");
+        if (currentUser.getRole() != User.Role.ADMIN) {
+            throw new UnauthorizedException("Only admins can update posts");
         }
         
         if (request.getTitle() != null) {
@@ -114,28 +76,6 @@ public class PostService {
         }
         if (request.getPublishedAt() != null) {
             post.setPublishedAt(request.getPublishedAt());
-        }
-        
-        // Update categories
-        if (request.getCategoryIds() != null) {
-            Set<Category> categories = new HashSet<>();
-            for (Long categoryId : request.getCategoryIds()) {
-                Category category = categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
-                categories.add(category);
-            }
-            post.setCategories(categories);
-        }
-        
-        // Update tags
-        if (request.getTagIds() != null) {
-            Set<Tag> tags = new HashSet<>();
-            for (Long tagId : request.getTagIds()) {
-                Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Tag not found: " + tagId));
-                tags.add(tag);
-            }
-            post.setTags(tags);
         }
         
         post = postRepository.save(post);
@@ -174,25 +114,13 @@ public class PostService {
                 .map(this::convertToResponse);
     }
     
-    public Page<PostResponse> getPostsByCategory(String categorySlug, Pageable pageable) {
-        return postRepository.findByStatusAndCategory(Post.PostStatus.PUBLISHED, categorySlug, pageable)
-                .map(this::convertToResponse);
-    }
-    
-    public Page<PostResponse> getPostsByTag(String tagSlug, Pageable pageable) {
-        return postRepository.findByStatusAndTag(Post.PostStatus.PUBLISHED, tagSlug, pageable)
-                .map(this::convertToResponse);
-    }
-    
     public Page<PostResponse> searchPosts(String query, Pageable pageable) {
         return postRepository.searchPublishedPosts(Post.PostStatus.PUBLISHED, query, pageable)
                 .map(this::convertToResponse);
     }
     
     public Page<PostResponse> getMyPosts(UserDetails userDetails, Pageable pageable) {
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return postRepository.findByAuthorId(user.getId(), pageable)
+        return postRepository.findAll(pageable)
                 .map(this::convertToResponse);
     }
     
@@ -204,10 +132,8 @@ public class PostService {
         User currentUser = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
-        // Check if user is the author or an admin
-        if (!post.getAuthor().getId().equals(currentUser.getId()) && 
-            currentUser.getRole() != User.Role.ADMIN) {
-            throw new UnauthorizedException("You don't have permission to delete this post");
+        if (currentUser.getRole() != User.Role.ADMIN) {
+            throw new UnauthorizedException("Only admins can delete posts");
         }
         
         postRepository.delete(post);
@@ -247,22 +173,6 @@ public class PostService {
                 post.getAuthor().getAvatarUrl()
         );
         response.setAuthor(authorInfo);
-        
-        // Set categories
-        if (post.getCategories() != null) {
-            Set<PostResponse.CategoryInfo> categoryInfos = post.getCategories().stream()
-                    .map(cat -> new PostResponse.CategoryInfo(cat.getId(), cat.getName(), cat.getSlug()))
-                    .collect(Collectors.toSet());
-            response.setCategories(categoryInfos);
-        }
-        
-        // Set tags
-        if (post.getTags() != null) {
-            Set<PostResponse.TagInfo> tagInfos = post.getTags().stream()
-                    .map(tag -> new PostResponse.TagInfo(tag.getId(), tag.getName(), tag.getSlug()))
-                    .collect(Collectors.toSet());
-            response.setTags(tagInfos);
-        }
         
         return response;
     }

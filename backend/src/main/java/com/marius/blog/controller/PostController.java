@@ -55,27 +55,7 @@ public class PostController {
         return ResponseEntity.ok(postService.searchPosts(q, pageable));
     }
     
-    @Operation(summary = "Get posts by category (public)", description = "Returns published posts in a category")
-    @GetMapping("/public/category/{categorySlug}")
-    public ResponseEntity<Page<PostResponse>> getPostsByCategory(
-            @PathVariable String categorySlug,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(postService.getPostsByCategory(categorySlug, pageable));
-    }
-    
-    @Operation(summary = "Get posts by tag (public)", description = "Returns published posts with a tag")
-    @GetMapping("/public/tag/{tagSlug}")
-    public ResponseEntity<Page<PostResponse>> getPostsByTag(
-            @PathVariable String tagSlug,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(postService.getPostsByTag(tagSlug, pageable));
-    }
-    
-    @Operation(summary = "Create a new post", description = "Creates a new blog post (AUTHOR/ADMIN only)")
+    @Operation(summary = "Create a new post", description = "Creates a new blog post for the authenticated user")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<PostResponse> createPost(
@@ -85,7 +65,7 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     
-    @Operation(summary = "Get my posts", description = "Returns all posts by the authenticated user")
+    @Operation(summary = "Get dashboard posts", description = "Returns all posts for authenticated users")
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/my-posts")
     public ResponseEntity<Page<PostResponse>> getMyPosts(
@@ -103,7 +83,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostById(id));
     }
     
-    @Operation(summary = "Update a post", description = "Updates an existing post (author or admin only)")
+    @Operation(summary = "Update a post", description = "Updates an existing post (admin only)")
     @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(
@@ -113,7 +93,7 @@ public class PostController {
         return ResponseEntity.ok(postService.updatePost(id, request, userDetails));
     }
     
-    @Operation(summary = "Delete a post", description = "Deletes a post (author or admin only)")
+    @Operation(summary = "Delete a post", description = "Deletes a post (admin only)")
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(

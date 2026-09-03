@@ -4,13 +4,15 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: radial-gradient(circle at center top, rgba(124, 140, 255, 0.16), transparent 32rem),
+    var(--bg);
 }
 
 .auth-card {
-  background: white;
+  background: var(--surface);
   border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
   padding: 3rem;
   width: 100%;
   max-width: 450px;
@@ -24,14 +26,14 @@
 .auth-header h1 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .auth-header p {
-  color: #666;
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
@@ -49,13 +51,13 @@
 
 .form-group label {
   font-weight: 500;
-  color: #333;
+  color: var(--text-soft);
   font-size: 0.9rem;
 }
 
 .form-group input {
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border);
   border-radius: 5px;
   font-size: 1rem;
   transition: border-color 0.3s;
@@ -63,7 +65,7 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--accent);
 }
 
 .btn {
@@ -77,14 +79,15 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--accent-gradient);
+  color: #061016;
 }
 
 .btn-primary:hover:not(:disabled) {
-  opacity: 0.9;
+  color: #061016;
+  filter: brightness(1.08);
   transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(69, 214, 197, 0.25);
 }
 
 .btn:disabled {
@@ -93,26 +96,27 @@
 }
 
 .error-message {
-  background: #fee;
-  color: #c33;
+  background: rgba(255, 107, 122, 0.12);
+  color: #ffc3ca;
   padding: 0.75rem;
   border-radius: 5px;
   margin-bottom: 1rem;
-  border: 1px solid #fcc;
+  border: 1px solid rgba(255, 107, 122, 0.45);
 }
 
 .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .auth-footer a {
-  color: #667eea;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 500;
 }
 
 .auth-footer a:hover {
+  color: var(--accent-hover);
   text-decoration: underline;
 }

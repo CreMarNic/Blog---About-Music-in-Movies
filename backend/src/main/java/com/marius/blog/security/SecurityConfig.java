@@ -58,8 +58,6 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/posts/public/**").permitAll()
-                .requestMatchers("/api/categories/public/**").permitAll()
-                .requestMatchers("/api/tags/public/**").permitAll()
                 .requestMatchers("/api/comments/public/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
                 .requestMatchers("/api-docs/**", "/v3/api-docs/**", "/v3/api-docs").permitAll()

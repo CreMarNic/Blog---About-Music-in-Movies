@@ -15,11 +15,6 @@ const PostCard = ({ post }) => {
           <span className="post-card-date">
             {post.publishedAt ? format(new Date(post.publishedAt), 'MMM d, yyyy') : 'Draft'}
           </span>
-          {post.categories && post.categories.length > 0 && (
-            <span className="post-card-category">
-              {post.categories[0].name}
-            </span>
-          )}
         </div>
         <h2 className="post-card-title">
           <Link to={`/post/${post.slug}`}>{post.title}</Link>

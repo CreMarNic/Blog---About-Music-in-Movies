@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { postsAPI, commentsAPI } from '../services/api';
 import CommentSection from '../components/CommentSection';
@@ -50,15 +50,6 @@ const PostDetail = () => {
             <span className="post-detail-date">
               {post.publishedAt ? format(new Date(post.publishedAt), 'MMMM d, yyyy') : 'Draft'}
             </span>
-            {post.categories && post.categories.length > 0 && (
-              <div className="post-detail-categories">
-                {post.categories.map((cat) => (
-                  <Link key={cat.id} to={`/category/${cat.slug}`} className="category-tag">
-                    {cat.name}
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
           <h1 className="post-detail-title">{post.title}</h1>
           {post.excerpt && <p className="post-detail-excerpt">{post.excerpt}</p>}
@@ -72,17 +63,6 @@ const PostDetail = () => {
           className="post-detail-body"
           dangerouslySetInnerHTML={{ __html: post.content || '' }}
         />
-
-        {post.tags && post.tags.length > 0 && (
-          <div className="post-detail-tags">
-            <strong>Tags: </strong>
-            {post.tags.map((tag) => (
-              <Link key={tag.id} to={`/tag/${tag.slug}`} className="tag-link">
-                #{tag.name}
-              </Link>
-            ))}
-          </div>
-        )}
       </article>
 
       <CommentSection postId={post.id} />

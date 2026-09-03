@@ -13,6 +13,9 @@ Thumbs.db
 *.log
 logs/
 
+# Local H2 database
+backend/data/
+
 # Temporary files
 *.tmp
 *.temp

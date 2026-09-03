@@ -34,8 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Skip JWT filter for public endpoints
         if (path.startsWith("/api/auth/") || 
             path.startsWith("/api/posts/public/") ||
-            path.startsWith("/api/categories/public/") ||
-            path.startsWith("/api/tags/public/") ||
             path.startsWith("/api/comments/public/") ||
             path.startsWith("/swagger-ui") || 
             path.startsWith("/api-docs") || 

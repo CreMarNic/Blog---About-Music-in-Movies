@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { postsAPI, categoriesAPI, tagsAPI } from '../services/api';
+import { postsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import RichTextEditor from '../components/RichTextEditor';
 import './PostEditor.css';
@@ -8,12 +8,10 @@ import './PostEditor.css';
 const PostEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthor, loading: authLoading } = useAuth();
+  const { loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [tags, setTags] = useState([]);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -21,8 +19,6 @@ const PostEditor = () => {
     excerpt: '',
     featuredImageUrl: '',
     status: 'DRAFT',
-    categoryIds: [],
-    tagIds: [],
   });
 
   useEffect(() => {
@@ -36,38 +32,9 @@ const PostEditor = () => {
           return;
         }
         
-        // Check if user is author
-        const isUserAuthor = isAuthor();
-        console.log('PostEditor: isAuthor check:', isUserAuthor);
-        
-        if (!isUserAuthor) {
-          console.log('PostEditor: User is not author, redirecting...');
-          navigate('/');
-          return;
-        }
-        
         console.log('PostEditor: Loading data...');
         setLoading(true);
         setError(null);
-        
-        // Load categories and tags in parallel
-        const [categoriesData, tagsData] = await Promise.all([
-          categoriesAPI.getAll().catch(err => {
-            console.error('Error loading categories:', err);
-            return [];
-          }),
-          tagsAPI.getAll().catch(err => {
-            console.error('Error loading tags:', err);
-            return [];
-          })
-        ]);
-        
-        setCategories(categoriesData || []);
-        setTags(tagsData || []);
-        console.log('PostEditor: Categories and tags loaded', { 
-          categories: categoriesData?.length || 0, 
-          tags: tagsData?.length || 0 
-        });
         
         // Load post if editing
         if (id) {
@@ -79,8 +46,6 @@ const PostEditor = () => {
             excerpt: post.excerpt || '',
             featuredImageUrl: post.featuredImageUrl || '',
             status: post.status || 'DRAFT',
-            categoryIds: post.categories?.map(c => c.id) || [],
-            tagIds: post.tags?.map(t => t.id) || [],
           });
           console.log('PostEditor: Post loaded');
         }
@@ -110,24 +75,6 @@ const PostEditor = () => {
     setFormData({
       ...formData,
       content,
-    });
-  };
-
-  const handleCategoryChange = (categoryId) => {
-    setFormData({
-      ...formData,
-      categoryIds: formData.categoryIds.includes(categoryId)
-        ? formData.categoryIds.filter(id => id !== categoryId)
-        : [...formData.categoryIds, categoryId],
-    });
-  };
-
-  const handleTagChange = (tagId) => {
-    setFormData({
-      ...formData,
-      tagIds: formData.tagIds.includes(tagId)
-        ? formData.tagIds.filter(id => id !== tagId)
-        : [...formData.tagIds, tagId],
     });
   };
 
@@ -167,8 +114,6 @@ const PostEditor = () => {
   }
 
   console.log('PostEditor: Rendering form', { 
-    categories: categories.length, 
-    tags: tags.length,
     formData: { title: formData.title, status: formData.status }
   });
 
@@ -256,46 +201,6 @@ const PostEditor = () => {
               <option value="DRAFT">Draft</option>
               <option value="PUBLISHED">Published</option>
             </select>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Categories</label>
-          <div className="checkbox-group">
-            {categories.length === 0 ? (
-              <p style={{ color: '#999', fontStyle: 'italic' }}>No categories available. Create categories first.</p>
-            ) : (
-              categories.map((category) => (
-                <label key={category.id} className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={formData.categoryIds.includes(category.id)}
-                    onChange={() => handleCategoryChange(category.id)}
-                  />
-                  {category.name}
-                </label>
-              ))
-            )}
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Tags</label>
-          <div className="checkbox-group">
-            {tags.length === 0 ? (
-              <p style={{ color: '#999', fontStyle: 'italic' }}>No tags available. Create tags first.</p>
-            ) : (
-              tags.map((tag) => (
-                <label key={tag.id} className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={formData.tagIds.includes(tag.id)}
-                    onChange={() => handleTagChange(tag.id)}
-                  />
-                  {tag.name}
-                </label>
-              ))
-            )}
           </div>
         </div>
 

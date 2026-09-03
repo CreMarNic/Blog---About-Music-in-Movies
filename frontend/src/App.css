@@ -2,7 +2,9 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f5f7fa;
+  background: radial-gradient(circle at top left, rgba(69, 214, 197, 0.12), transparent 34rem),
+    linear-gradient(180deg, #0b1017 0%, #101722 100%);
+  color: var(--text);
 }
 
 .main-content {
@@ -20,5 +22,5 @@
 
 .loading-spinner {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-muted);
 }

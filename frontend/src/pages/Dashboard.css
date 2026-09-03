@@ -13,7 +13,7 @@
 
 .dashboard-header h1 {
   font-size: 2rem;
-  color: #333;
+  color: var(--text);
 }
 
 .dashboard-stats {
@@ -24,16 +24,17 @@
 }
 
 .stat-card {
-  background: white;
+  background: var(--surface);
   border-radius: 10px;
   padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
   text-align: center;
 }
 
 .stat-card h3 {
   margin: 0 0 0.5rem 0;
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -41,7 +42,7 @@
 .stat-number {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #667eea;
+  color: var(--accent);
   margin: 0;
 }
 
@@ -50,22 +51,24 @@
 .dashboard-error {
   text-align: center;
   padding: 3rem;
-  background: white;
+  background: var(--surface);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .dashboard-posts {
-  background: white;
+  background: var(--surface);
   border-radius: 10px;
   padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .dashboard-posts h2 {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--text);
 }
 
 .posts-table {
@@ -76,27 +79,29 @@
 .posts-table th {
   text-align: left;
   padding: 1rem;
-  border-bottom: 2px solid #e0e0e0;
-  color: #666;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-muted);
   font-weight: 600;
 }
 
 .posts-table td {
   padding: 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
 }
 
 .posts-table tr:hover {
-  background: #f9f9f9;
+  background: var(--surface-hover);
 }
 
 .posts-table a {
-  color: #667eea;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 500;
 }
 
 .posts-table a:hover {
+  color: var(--accent-hover);
   text-decoration: underline;
 }
 
@@ -108,18 +113,18 @@
 }
 
 .status-published {
-  background: #d4edda;
-  color: #155724;
+  background: rgba(69, 214, 197, 0.16);
+  color: #9ff7ed;
 }
 
 .status-draft {
-  background: #fff3cd;
-  color: #856404;
+  background: rgba(251, 191, 36, 0.18);
+  color: #ffe19a;
 }
 
 .status-archived {
-  background: #f8d7da;
-  color: #721c24;
+  background: rgba(255, 107, 122, 0.16);
+  color: #ffc3ca;
 }
 
 .action-buttons {
@@ -140,30 +145,35 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--accent-gradient);
+  color: #061016;
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  color: #061016;
+  filter: brightness(1.08);
 }
 
 .btn-secondary {
-  background: #e0e0e0;
-  color: #333;
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-  background: #d0d0d0;
+  background: var(--surface-hover);
+  color: var(--accent-hover);
+  border-color: var(--accent);
 }
 
 .btn-danger {
-  background: #dc3545;
-  color: white;
+  background: #b42335;
+  color: #fff4f5;
 }
 
 .btn-danger:hover {
-  background: #c82333;
+  background: #e5485b;
+  color: white;
 }
 
 .btn-small {

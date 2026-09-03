@@ -4,7 +4,6 @@ import com.marius.blog.model.Post.PostStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Schema(description = "Response object for a blog post")
 public class PostResponse {
@@ -32,12 +31,6 @@ public class PostResponse {
     
     @Schema(description = "Author information")
     private AuthorInfo author;
-    
-    @Schema(description = "Categories")
-    private Set<CategoryInfo> categories;
-    
-    @Schema(description = "Tags")
-    private Set<TagInfo> tags;
     
     @Schema(description = "Views count")
     private Long viewsCount;
@@ -118,22 +111,6 @@ public class PostResponse {
         this.author = author;
     }
     
-    public Set<CategoryInfo> getCategories() {
-        return categories;
-    }
-    
-    public void setCategories(Set<CategoryInfo> categories) {
-        this.categories = categories;
-    }
-    
-    public Set<TagInfo> getTags() {
-        return tags;
-    }
-    
-    public void setTags(Set<TagInfo> tags) {
-        this.tags = tags;
-    }
-    
     public Long getViewsCount() {
         return viewsCount;
     }
@@ -206,81 +183,4 @@ public class PostResponse {
         }
     }
     
-    @Schema(description = "Category information")
-    public static class CategoryInfo {
-        private Long id;
-        private String name;
-        private String slug;
-        
-        public CategoryInfo() {}
-        
-        public CategoryInfo(Long id, String name, String slug) {
-            this.id = id;
-            this.name = name;
-            this.slug = slug;
-        }
-        
-        public Long getId() {
-            return id;
-        }
-        
-        public void setId(Long id) {
-            this.id = id;
-        }
-        
-        public String getName() {
-            return name;
-        }
-        
-        public void setName(String name) {
-            this.name = name;
-        }
-        
-        public String getSlug() {
-            return slug;
-        }
-        
-        public void setSlug(String slug) {
-            this.slug = slug;
-        }
-    }
-    
-    @Schema(description = "Tag information")
-    public static class TagInfo {
-        private Long id;
-        private String name;
-        private String slug;
-        
-        public TagInfo() {}
-        
-        public TagInfo(Long id, String name, String slug) {
-            this.id = id;
-            this.name = name;
-            this.slug = slug;
-        }
-        
-        public Long getId() {
-            return id;
-        }
-        
-        public void setId(Long id) {
-            this.id = id;
-        }
-        
-        public String getName() {
-            return name;
-        }
-        
-        public void setName(String name) {
-            this.name = name;
-        }
-        
-        public String getSlug() {
-            return slug;
-        }
-        
-        public void setSlug(String slug) {
-            this.slug = slug;
-        }
-    }
 }

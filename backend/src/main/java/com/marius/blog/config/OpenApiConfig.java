@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
     info = @Info(
         title = "Blog Platform API - About Music in Movies",
         version = "1.0.0",
-        description = "RESTful API for a blog platform focused on music in movies. Features include post management, categories, tags, comments, and user authentication.",
+        description = "RESTful API for a blog platform focused on music in movies. Features include post management, comments, and user authentication.",
         contact = @Contact(
             name = "Marius",
             email = "contact@example.com"

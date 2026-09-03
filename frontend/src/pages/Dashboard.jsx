@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { isAuthor } = useAuth();
+  const { isAdmin } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -16,9 +16,6 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    if (!isAuthor()) {
-      return;
-    }
     loadPosts();
   }, []);
 
@@ -57,15 +54,6 @@ const Dashboard = () => {
     }
   };
 
-  if (!isAuthor()) {
-    return (
-      <div className="dashboard-error">
-        <h2>Access Denied</h2>
-        <p>You need to be an Author or Admin to access the dashboard.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -101,7 +89,7 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className="dashboard-posts">
-          <h2>Your Posts</h2>
+          <h2>All Posts</h2>
           <table className="posts-table">
             <thead>
               <tr>
@@ -131,18 +119,22 @@ const Dashboard = () => {
                   <td>{post.viewsCount || 0}</td>
                   <td>
                     <div className="action-buttons">
-                      <Link
-                        to={`/post-editor/${post.id}`}
-                        className="btn btn-small btn-secondary"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(post.id)}
-                        className="btn btn-small btn-danger"
-                      >
-                        Delete
-                      </button>
+                      {isAdmin() && (
+                        <>
+                          <Link
+                            to={`/post-editor/${post.id}`}
+                            className="btn btn-small btn-secondary"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(post.id)}
+                            className="btn btn-small btn-danger"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>

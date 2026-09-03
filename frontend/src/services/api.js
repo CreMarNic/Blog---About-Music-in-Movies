@@ -75,20 +75,6 @@ export const postsAPI = {
     return response.data;
   },
   
-  getByCategory: async (categorySlug, page = 0, size = 10) => {
-    const response = await api.get(API_ENDPOINTS.POSTS_BY_CATEGORY(categorySlug), {
-      params: { page, size }
-    });
-    return response.data;
-  },
-  
-  getByTag: async (tagSlug, page = 0, size = 10) => {
-    const response = await api.get(API_ENDPOINTS.POSTS_BY_TAG(tagSlug), {
-      params: { page, size }
-    });
-    return response.data;
-  },
-  
   getMyPosts: async (page = 0, size = 10) => {
     const response = await api.get(API_ENDPOINTS.MY_POSTS, {
       params: { page, size }
@@ -108,70 +94,6 @@ export const postsAPI = {
   
   delete: async (id) => {
     await api.delete(API_ENDPOINTS.POST_BY_ID(id));
-  },
-};
-
-// Categories API
-export const categoriesAPI = {
-  getAll: async () => {
-    const response = await api.get(API_ENDPOINTS.CATEGORIES_PUBLIC);
-    return response.data;
-  },
-  
-  getBySlug: async (slug) => {
-    const response = await api.get(API_ENDPOINTS.CATEGORY_BY_SLUG(slug));
-    return response.data;
-  },
-  
-  getById: async (id) => {
-    const response = await api.get(API_ENDPOINTS.CATEGORY_BY_ID(id));
-    return response.data;
-  },
-  
-  create: async (categoryData) => {
-    const response = await api.post(API_ENDPOINTS.CATEGORIES, categoryData);
-    return response.data;
-  },
-  
-  update: async (id, categoryData) => {
-    const response = await api.put(API_ENDPOINTS.CATEGORY_BY_ID(id), categoryData);
-    return response.data;
-  },
-  
-  delete: async (id) => {
-    await api.delete(API_ENDPOINTS.CATEGORY_BY_ID(id));
-  },
-};
-
-// Tags API
-export const tagsAPI = {
-  getAll: async () => {
-    const response = await api.get(API_ENDPOINTS.TAGS_PUBLIC);
-    return response.data;
-  },
-  
-  getBySlug: async (slug) => {
-    const response = await api.get(API_ENDPOINTS.TAG_BY_SLUG(slug));
-    return response.data;
-  },
-  
-  getById: async (id) => {
-    const response = await api.get(API_ENDPOINTS.TAG_BY_ID(id));
-    return response.data;
-  },
-  
-  create: async (tagData) => {
-    const response = await api.post(API_ENDPOINTS.TAGS, tagData);
-    return response.data;
-  },
-  
-  update: async (id, tagData) => {
-    const response = await api.put(API_ENDPOINTS.TAG_BY_ID(id), tagData);
-    return response.data;
-  },
-  
-  delete: async (id) => {
-    await api.delete(API_ENDPOINTS.TAG_BY_ID(id));
   },
 };
 

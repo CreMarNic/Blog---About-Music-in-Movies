@@ -3,29 +3,24 @@ import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { isAuthenticated, user, logout, isAuthor } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('/login');
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-brand">
-          🎵 About Music in Movies
+        <Link to={isAuthenticated ? '/dashboard' : '/login'} className="navbar-brand">
+          <span className="navbar-note">♪</span> About Music in Movies
         </Link>
         
         <div className="navbar-menu">
-          <Link to="/" className="navbar-link">Home</Link>
-          
-          {isAuthenticated && isAuthor() && (
-            <>
-              <Link to="/dashboard" className="navbar-link">Dashboard</Link>
-              <Link to="/post-editor" className="navbar-link">New Post</Link>
-            </>
+          {isAuthenticated && (
+            <Link to="/dashboard" className="navbar-link">Dashboard</Link>
           )}
           
           {isAuthenticated ? (

@@ -80,7 +80,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => user?.role === 'ADMIN';
-  const isAuthor = () => user?.role === 'AUTHOR' || user?.role === 'ADMIN';
   const isUser = () => !!user;
 
   const value = {
@@ -92,7 +91,6 @@ export const AuthProvider = ({ children }) => {
     logout,
     isAuthenticated: !!token,
     isAdmin,
-    isAuthor,
     isUser,
   };
 

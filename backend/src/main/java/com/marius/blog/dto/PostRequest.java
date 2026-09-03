@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Schema(description = "Request object for creating or updating a post")
 public class PostRequest {
@@ -25,12 +24,6 @@ public class PostRequest {
     
     @Schema(description = "Post status", example = "PUBLISHED")
     private PostStatus status = PostStatus.DRAFT;
-    
-    @Schema(description = "Category IDs", example = "[1, 2]")
-    private Set<Long> categoryIds;
-    
-    @Schema(description = "Tag IDs", example = "[1, 2, 3]")
-    private Set<Long> tagIds;
     
     @Schema(description = "Published date (optional)")
     private LocalDateTime publishedAt;
@@ -75,22 +68,6 @@ public class PostRequest {
     
     public void setStatus(PostStatus status) {
         this.status = status;
-    }
-    
-    public Set<Long> getCategoryIds() {
-        return categoryIds;
-    }
-    
-    public void setCategoryIds(Set<Long> categoryIds) {
-        this.categoryIds = categoryIds;
-    }
-    
-    public Set<Long> getTagIds() {
-        return tagIds;
-    }
-    
-    public void setTagIds(Set<Long> tagIds) {
-        this.tagIds = tagIds;
     }
     
     public LocalDateTime getPublishedAt() {

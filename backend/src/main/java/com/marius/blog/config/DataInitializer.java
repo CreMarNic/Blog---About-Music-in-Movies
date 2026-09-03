@@ -4,6 +4,7 @@ import com.marius.blog.model.User;
 import com.marius.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +16,15 @@ public class DataInitializer implements CommandLineRunner {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
     
     @Override
     public void run(String... args) throws Exception {
+        jdbcTemplate.execute("DROP TABLE IF EXISTS post_tags");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS tags");
+
         // Create default admin user if it doesn't exist
         if (!userRepository.existsByUsername("admin")) {
             User admin = new User();
@@ -32,18 +39,5 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("   Password: admin123");
         }
         
-        // Create default author user if it doesn't exist
-        if (!userRepository.existsByUsername("author")) {
-            User author = new User();
-            author.setUsername("author");
-            author.setEmail("author@example.com");
-            author.setPassword(passwordEncoder.encode("author123"));
-            author.setRole(User.Role.AUTHOR);
-            author.setBio("Default Author");
-            userRepository.save(author);
-            System.out.println("✅ Default author user created!");
-            System.out.println("   Username: author");
-            System.out.println("   Password: author123");
-        }
     }
 }
