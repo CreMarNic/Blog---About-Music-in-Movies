@@ -23,4 +23,4 @@ COPY --from=build /app/target/blog-api-1.0.0.jar app.jar
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["sh", "-c", "if [ -n \"$DATABASE_URL\" ] && [ -z \"$SPRING_DATASOURCE_URL\" ]; then db_url=${DATABASE_URL#postgresql://}; host_and_db=${db_url#*@}; export SPRING_DATASOURCE_URL=\"jdbc:postgresql://${host_and_db}\"; fi; exec java -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "if [ -n \"$DATABASE_URL\" ] && [ -z \"$SPRING_DATASOURCE_URL\" ]; then db_url=\"$DATABASE_URL\"; db_url=${db_url#postgresql://}; db_url=${db_url#postgres://}; host_and_db=${db_url#*@}; export SPRING_DATASOURCE_URL=\"jdbc:postgresql://${host_and_db}\"; fi; exec java -jar app.jar"]
